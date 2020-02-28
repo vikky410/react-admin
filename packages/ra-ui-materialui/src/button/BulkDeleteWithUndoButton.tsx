@@ -56,13 +56,15 @@ const BulkDeleteWithUndoButton: FC<BulkDeleteWithUndoButtonProps> = ({
             unselectAll(resource);
             refresh();
         },
-        onFailure: error =>
+        onFailure: error => {
             notify(
                 typeof error === 'string'
                     ? error
                     : error.message || 'ra.notification.http_error',
                 'warning'
-            ),
+            );
+            refresh();
+        },
         undoable: true,
     });
 

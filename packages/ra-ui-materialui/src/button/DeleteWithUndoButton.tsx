@@ -49,13 +49,15 @@ const DeleteWithUndoButton: FC<DeleteWithUndoButtonProps> = ({
                 redirect(redirectTo, basePath);
                 refresh();
             },
-            onFailure: error =>
+            onFailure: error => {
                 notify(
                     typeof error === 'string'
                         ? error
                         : error.message || 'ra.notification.http_error',
                     'warning'
-                ),
+                );
+                refresh();
+            },
             undoable: true,
         }
     );
