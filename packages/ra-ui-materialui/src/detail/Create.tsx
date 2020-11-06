@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Children, cloneElement, useMemo } from 'react';
+import { Children, cloneElement, ReactElement, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import Card from '@material-ui/core/Card';
 import { makeStyles } from '@material-ui/core/styles';
@@ -57,9 +57,9 @@ import { CreateProps } from '../types';
  * );
  * export default App;
  */
-const Create = (props: CreateProps) => (
-    <CreateView {...props} {...useCreateController(props)} />
-);
+const Create = (
+    props: CreateProps & { children?: ReactElement | null }
+): ReactElement => <CreateView {...props} {...useCreateController(props)} />;
 
 Create.propTypes = {
     actions: PropTypes.element,
@@ -165,7 +165,9 @@ export const CreateView = (props: CreateViewProps) => {
 
 interface CreateViewProps
     extends CreateProps,
-        Omit<CreateControllerProps, 'resource'> {}
+        Omit<CreateControllerProps, 'resource'> {
+    children?: ReactElement | null;
+}
 
 CreateView.propTypes = {
     actions: PropTypes.element,

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Children, cloneElement, useMemo } from 'react';
+import { Children, cloneElement, ReactElement, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
@@ -61,9 +61,9 @@ import { EditProps } from '../types';
  * );
  * export default App;
  */
-const Edit = (props: EditProps): JSX.Element => (
-    <EditView {...props} {...useEditController(props)} />
-);
+const Edit = (
+    props: EditProps & { children?: ReactElement | null }
+): ReactElement => <EditView {...props} {...useEditController(props)} />;
 
 Edit.propTypes = {
     actions: PropTypes.element,
@@ -85,9 +85,11 @@ Edit.propTypes = {
     undoable: PropTypes.bool,
 };
 
-interface EditViewProps
+export interface EditViewProps
     extends EditProps,
-        Omit<EditControllerProps, 'resource'> {}
+        Omit<EditControllerProps, 'resource'> {
+    children?: ReactElement | null;
+}
 
 export const EditView = (props: EditViewProps) => {
     const {

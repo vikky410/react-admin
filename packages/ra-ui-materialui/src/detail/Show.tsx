@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { cloneElement, Children } from 'react';
+import { cloneElement, Children, ReactElement } from 'react';
 import PropTypes from 'prop-types';
 import Card from '@material-ui/core/Card';
 import { makeStyles } from '@material-ui/core/styles';
@@ -53,9 +53,9 @@ import { ShowProps } from '../types';
  * );
  * export default App;
  */
-const Show = (props: ShowProps) => (
-    <ShowView {...props} {...useShowController(props)} />
-);
+const Show = (
+    props: ShowProps & { children?: ReactElement | null }
+): ReactElement => <ShowView {...props} {...useShowController(props)} />;
 
 Show.propTypes = {
     actions: PropTypes.element,
@@ -72,9 +72,11 @@ Show.propTypes = {
     title: PropTypes.node,
 };
 
-interface ShowViewProps
+export interface ShowViewProps
     extends ShowProps,
-        Omit<ShowControllerProps, 'resource'> {}
+        Omit<ShowControllerProps, 'resource'> {
+    children?: ReactElement | null;
+}
 
 export const ShowView = (props: ShowViewProps) => {
     const {

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Children, cloneElement, FC } from 'react';
+import { Children, cloneElement, FC, ReactElement } from 'react';
 import PropTypes from 'prop-types';
 import Card from '@material-ui/core/Card';
 import classnames from 'classnames';
@@ -22,7 +22,7 @@ import DefaultActions from './ListActions';
 import Empty from './Empty';
 import { ListProps } from '../types';
 
-export const ListView: FC<ListViewProps> = props => {
+export const ListView = (props: ListViewProps) => {
     const {
         actions,
         aside,
@@ -199,7 +199,9 @@ const useStyles = makeStyles(
 
 export interface ListViewProps
     extends Omit<ListProps, 'basePath' | 'hasCreate' | 'perPage' | 'resource'>,
-        ListControllerProps {}
+        ListControllerProps {
+    children?: ReactElement | null;
+}
 
 const sanitizeRestProps: (
     props: Omit<

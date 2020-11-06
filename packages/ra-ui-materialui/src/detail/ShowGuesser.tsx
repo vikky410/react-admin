@@ -2,25 +2,26 @@ import * as React from 'react';
 import { useEffect, useState } from 'react';
 import inflection from 'inflection';
 import {
-    useEditController,
+    useShowController,
     InferredElement,
     getElementsFromRecords,
 } from 'ra-core';
 
-import { EditView } from './Edit';
-import editFieldTypes from './editFieldTypes';
+import { ShowView, ShowViewProps } from './Show';
+import showFieldTypes from './showFieldTypes';
+import { ShowProps } from '../types';
 
-const EditViewGuesser = props => {
+const ShowViewGuesser = (props: ShowViewProps) => {
     const { record, resource } = props;
     const [inferredChild, setInferredChild] = useState(null);
     useEffect(() => {
         if (record && !inferredChild) {
             const inferredElements = getElementsFromRecords(
                 [record],
-                editFieldTypes
+                showFieldTypes
             );
             const inferredChild = new InferredElement(
-                editFieldTypes.form,
+                showFieldTypes.show,
                 null,
                 inferredElements
             );
@@ -28,27 +29,27 @@ const EditViewGuesser = props => {
             process.env.NODE_ENV !== 'production' &&
                 // eslint-disable-next-line no-console
                 console.log(
-                    `Guessed Edit:
+                    `Guessed Show:
 
 export const ${inflection.capitalize(
                         inflection.singularize(resource)
-                    )}Edit = props => (
-    <Edit {...props}>
+                    )}Show = props => (
+    <Show {...props}>
 ${inferredChild.getRepresentation()}
-    </Edit>
+    </Show>
 );`
                 );
             setInferredChild(inferredChild.getElement());
         }
     }, [record, inferredChild, resource]);
 
-    return <EditView {...props}>{inferredChild}</EditView>;
+    return <ShowView {...props}>{inferredChild}</ShowView>;
 };
 
-EditViewGuesser.propTypes = EditView.propTypes;
+ShowViewGuesser.propTypes = ShowView.propTypes;
 
-const EditGuesser = props => (
-    <EditViewGuesser {...props} {...useEditController(props)} />
+const ShowGuesser = (props: ShowProps) => (
+    <ShowViewGuesser {...props} {...useShowController(props)} />
 );
 
-export default EditGuesser;
+export default ShowGuesser;
